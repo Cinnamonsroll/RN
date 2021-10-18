@@ -78,18 +78,18 @@ outputs
 
 ```json
 {
-  author: "Velddev",
-  description: "calculator created in js",
-  devDependencies: {
-    canvas: "^0.1.1",
-    jest: "^27.2.5"
+  "author": "Velddev",
+  "description": "calculator created in js",
+  "devDependencies": {
+    "canvas": "^0.1.1",
+    "jest": "^27.2.5"
   },
-  license: "MIT",
-  main: "index.js",
-  name: "calculator",
-  scripts: {
-    start: "node src/index"
+  "license": "MIT",
+  "main": "index.js",
+  "name": "calculator",
+  "scripts": {
+    "start": "node src/index"
   },
-  version: "1.0.0"
+  "version": "1.0.0"
 }
 ```
