@@ -91,4 +91,5 @@ outputs
     start: "node src/index"
   },
   version: "1.0.0"
-}```
+}
+```
