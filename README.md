@@ -61,3 +61,34 @@ outputs
 }
 }
 ```
+
+
+Example:
+```
+{name} = "calculator"; 
+{version} = "1.0.0"; 
+{description} = ":name: created in js"; 
+{main} = "index.js"; 
+{author} = "Velddev"; 
+{license} = "*mit^*"; 
+{scripts} = ("start":"node src/index"); 
+{devDependencies} = ("jest":"^27.2.5", "canvas":"^0.1.1");
+```
+outputs
+
+```json
+{
+  author: "Velddev",
+  description: "calculator created in js",
+  devDependencies: {
+    canvas: "^0.1.1",
+    jest: "^27.2.5"
+  },
+  license: "MIT",
+  main: "index.js",
+  name: "calculator",
+  scripts: {
+    start: "node src/index"
+  },
+  version: "1.0.0"
+}```
