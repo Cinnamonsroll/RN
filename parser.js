@@ -1,42 +1,44 @@
 function parse(input) {
-  let jsonOutput = {},
-    parsing = "",
+  if (typeof input !== "string")
+    throw new TypeError("The 'input' argument must be a string.");
+
+  const jsonOutput = {},
+    len = input.length + 1;
+  let parsing = "",
     current = [],
     settingValue = false;
-  for (let i = 0, l = input.length + 1; i < l; i++) {
-    if (input[i] === ";") {
-      for (let currentToken of current) {
+
+  for (let i = 0; i < len; i++) {
+    const char = input[i];
+
+    if (char === ";") {
+      for (const currentToken of current)
         jsonOutput[currentToken] =
-          parsing.includes(")") && parsing.includes(")")
+          parsing.includes("(") && parsing.includes(")")
             ? JSON.parse(
-                ` {${parsing
-                  .replaceAll("(", "")
-                  .replaceAll(")", "")
-                  .trim()} }`
+                ` {${parsing.replaceAll("(", "").replaceAll(")", "").trim()} }`
               )
             : parsing
-                .replace(/\*(.*)\*/gi, w =>
-                  w.replaceAll("*", "").endsWith("^")
-                    ? w
-                        .replaceAll("*", "")
-                        .slice(0, -1)
-                        .toUpperCase()
-                    : w.replaceAll("*", "")
-                )
-                .replace(/:(.*):/gi, w =>
-                  w.replaceAll(":", "").endsWith("^")
-                    ? jsonOutput[
-                        w.replaceAll(":", "").slice(0, -1)
-                      ].toUpperCase()
-                    : jsonOutput[w.replaceAll(":", "")]
-                )
+                .replace(/\*.*\*/g, (w_) => {
+                  const w = w_.replaceAll("*", "");
+
+                  return w.endsWith("^") ? w.slice(0, -1).toUpperCase() : w;
+                })
+                .replace(/:.*:/g, (w_) => {
+                  const w = w_.replaceAll(":", "");
+
+                  return w.endsWith("^")
+                    ? jsonOutput[w.slice(0, -1)].toUpperCase()
+                    : jsonOutput[w];
+                })
                 .replaceAll('"', "")
                 .trim();
-      }
+
       current = [];
       settingValue = false;
     }
-    switch (input[i]) {
+
+    switch (char) {
       case " ":
       case void 0:
         if (settingValue) parsing += " ";
@@ -46,15 +48,16 @@ function parse(input) {
         break;
       case "}":
         if (!settingValue) current.push(parsing);
+
         parsing = "";
         break;
       case "=":
         settingValue = true;
         break;
       default:
-        parsing += input[i];
-        break;
+        parsing += char;
     }
   }
+
   return jsonOutput;
 }
