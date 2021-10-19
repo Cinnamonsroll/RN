@@ -26,8 +26,7 @@ function parse(input) {
         if (settingValue) parsing += " ";
         else parsing = "";
         break;
-      case "{":
-        break;
+      case "{": break;
       case "}":
         if (!settingValue) current.push(parsing);
         parsing = "";
