@@ -38,3 +38,5 @@ function parse(input) {
 
   return jsonOutput;
 }
+
+module.exports = parse;
