@@ -1,38 +1,20 @@
 function parse(input) {
-  if (typeof input !== "string")
-    throw new TypeError("The 'input' argument must be a string.");
+  if (typeof input !== "string") throw new TypeError("The 'input' argument must be a string.");
 
-  const jsonOutput = {},
-    len = input.length + 1;
-  let parsing = "",
-    current = [],
-    settingValue = false;
+  const jsonOutput = {}, len = input.length + 1;
+  let parsing = "", current = [], settingValue = false;
 
   for (let i = 0; i < len; i++) {
     const char = input[i];
-
     if (char === ";") {
       for (const currentToken of current)
         jsonOutput[currentToken] =
           parsing.includes("(") && parsing.includes(")")
-            ? JSON.parse(
-                ` {${parsing.replaceAll("(", "").replaceAll(")", "").trim()} }`
-              )
+            ? JSON.parse(`{${parsing.replaceAll("(", "").replaceAll(")", "").trim()}}`)
             : parsing
-                .replace(/\*.*\*/g, (w_) => {
-                  const w = w_.replaceAll("*", "");
-
-                  return w.endsWith("^") ? w.slice(0, -1).toUpperCase() : w;
-                })
-                .replace(/:.*:/g, (w_) => {
-                  const w = w_.replaceAll(":", "");
-
-                  return w.endsWith("^")
-                    ? jsonOutput[w.slice(0, -1)].toUpperCase()
-                    : jsonOutput[w];
-                })
-                .replaceAll('"', "")
-                .trim();
+              .replace(/\*.*\*/g, (w_) => (w = w_.replaceAll("*", ""), w.endsWith("^") ? w.slice(0, -1).toUpperCase() : w))
+              .replace(/:.*:/g, (w_) => (w = w_.replaceAll(":", ""), w.endsWith("^") ? jsonOutput[w.slice(0, -1)].toUpperCase() : jsonOutput[w]))
+              .replaceAll('"', "").trim();
 
       current = [];
       settingValue = false;
@@ -44,20 +26,17 @@ function parse(input) {
         if (settingValue) parsing += " ";
         else parsing = "";
         break;
-      case "{":
-        break;
+      case "{": break;
       case "}":
         if (!settingValue) current.push(parsing);
-
         parsing = "";
         break;
-      case "=":
-        settingValue = true;
-        break;
-      default:
-        parsing += char;
+      case "=": settingValue = true; break;
+      default: parsing += char;
     }
   }
 
   return jsonOutput;
 }
+
+module.exports = parse;
